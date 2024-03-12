@@ -6,4 +6,6 @@ We will have 4 classes Player which will contain money count of a person,name,po
 
 "Methods"
 For Player we should have rolling dice, changing position, buying properties, collecting rent.
-For Fortune cards, we have 3 main 
+For Fortune cards, we have 4 methonds which are collecting money, giving money, jail status, moving position.
+For Property we should check the owner, and the player on property is not the owner it takes money(method in Player), offer buying
+For Game class we should have information about player, its properties,money etc. and end turn method.
