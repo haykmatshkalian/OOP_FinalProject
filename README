@@ -1,0 +1,9 @@
+Author(s): Hayk Matshklalyan, Aren Oganesyan, Aria Sharifi
+
+"Classes"
+
+We will have 4 classes Player which will contain money count of a person,name,position,status in jail. Fortune crads class which will type and value,which will be given or taken from Player. Property class should have title, owner, price, rent, house count and color of property(group of property). And the main class Game which will create a field out of other classes and everything will work there.
+
+"Methods"
+For Player we should have rolling dice, changing position, buying properties, collecting rent.
+For Fortune cards, we have 3 main 
