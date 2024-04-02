@@ -35,6 +35,5 @@ public class Main {
                 System.out.println("Invalid input. Please enter three valid indices separated by spaces.");
             }
         }
-        sc.close();
     }
 }
