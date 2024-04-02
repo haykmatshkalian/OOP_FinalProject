@@ -1,6 +1,3 @@
-import java.util.Random;
-import java.util.Scanner;
-
 public class Card {
     private String shape;
     private String color;
