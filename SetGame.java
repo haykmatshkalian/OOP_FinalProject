@@ -1,6 +1,4 @@
 import java.util.Random;
-import java.util.Scanner;
-
 public class SetGame {
     private final int BOARD_SIZE = 12;
     private final int DECK_SIZE = 81;
