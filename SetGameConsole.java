@@ -6,7 +6,8 @@ public class SetGameConsole {
     private final Player player = new Player();
     private final Scanner sc = new Scanner(System.in);
     private GameTimer gameTimer = new GameTimer(60); // 60 seconds timer
-
+    private int hintCount = 0
+    
     public void playConsole() {
         gameTimer.startTimer();
         Player player1 = new Player(player);
@@ -17,6 +18,7 @@ public class SetGameConsole {
             String input = sc.nextLine();
             if (input.equalsIgnoreCase("hint")) {
                 System.out.println(Arrays.toString(setGame.hint()));
+                hintCount++;
             }
             if (input.equalsIgnoreCase("add")) {
                 setGame.addRow();
