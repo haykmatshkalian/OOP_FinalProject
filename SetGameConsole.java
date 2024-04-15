@@ -6,7 +6,6 @@ public class SetGameConsole {
     private final Player player = new Player();
     private final Scanner sc = new Scanner(System.in);
     private GameTimer gameTimer = new GameTimer(60); // 60 seconds timer
-    private int hintCount = 0
     
     public void playConsole() {
         gameTimer.startTimer();
@@ -66,12 +65,6 @@ public class SetGameConsole {
                 System.out.println("Invalid difficulty level. Using default time limit.");
                 gameTimer = new GameTimer(60); // Default to hard if input is invalid
         }
-    }
-
-    public static void main(String[] args) {
-        SetGameConsole setGameConsole = new SetGameConsole();
-        setGameConsole.promptDifficultyLevel(); // Prompt user to select the difficulty level
-        setGameConsole.playConsole();
     }
 
     private void promptDifficultyLevel() {
