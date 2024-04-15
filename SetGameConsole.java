@@ -49,4 +49,32 @@ public class SetGameConsole {
         play.addScore();
         gameTimer.addTime(10);
     }
+    private void setDifficultyLevel(String difficulty) {
+        switch (difficulty.toLowerCase()) {
+            case "easy":
+                gameTimer = new GameTimer(30);
+                break;
+            case "medium":
+                gameTimer = new GameTimer(45);
+                break;
+            case "hard":
+                gameTimer = new GameTimer(60);
+                break;
+            default:
+                System.out.println("Invalid difficulty level. Using default time limit.");
+                gameTimer = new GameTimer(60); // Default to hard if input is invalid
+        }
+    }
+
+    public static void main(String[] args) {
+        SetGameConsole setGameConsole = new SetGameConsole();
+        setGameConsole.promptDifficultyLevel(); // Prompt user to select the difficulty level
+        setGameConsole.playConsole();
+    }
+
+    private void promptDifficultyLevel() {
+        System.out.println("Welcome to Set Game! Select the difficulty level (easy, medium, hard):");
+        String input = sc.nextLine();
+        setDifficultyLevel(input);
+    }
 }
