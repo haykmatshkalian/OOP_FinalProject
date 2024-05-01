@@ -7,6 +7,7 @@ public class SetGameConsole{
     private final Board setGame = new Board(new Deck());
     private final Scanner sc = new Scanner(System.in);
     private final ArrayList<Player> players = new ArrayList<>();
+    private boolean rightSet = true;
     public enum Difficulty {
         EASY,
         MEDIUM,
@@ -27,7 +28,7 @@ public class SetGameConsole{
         play(singlePlayer);
     }
 
-    public void playConsoleMultiPlayer(){
+    public void playConsoleMultiPlayer() {
         System.out.println("Entering console version of Multiplayer...");
         play();
     }
@@ -56,14 +57,14 @@ public class SetGameConsole{
             displayCurrentState(currentPlayer);
             String input = sc.next();
             manageInput(input, currentPlayer);
-
             if (currentTimer.getSecondsLeft() == 0) {
                 System.out.println("Time's up for " + currentPlayer.getNickname() + "!");
                 removePlayer(turn);
             } else {
-                if (!input.equalsIgnoreCase("add") && !input.equalsIgnoreCase("hint") && !input.replaceAll("\\s", "").isEmpty()) {
+                if (!rightSet && !input.equalsIgnoreCase("add") && !input.equalsIgnoreCase("hint") && !input.replaceAll("\\s", "").isEmpty()) {
                     turn = (turn + 1) % players.size();
                     currentTimer.stopTimer();
+                    rightSet = true;
                 }
             }
         }
@@ -72,15 +73,19 @@ public class SetGameConsole{
     private void addPlayers() {
         int difficulty = promptDifficultyLevel();
         setDifficultyLevel(difficulty);
+        try {
+            System.out.println("Enter number of players: ");
+            int num = sc.nextInt();
 
-        System.out.println("Enter number of players: ");
-        int num = sc.nextInt();
-
-        sc.nextLine();
-        for (int i = 0; i < num; i++) {
-            System.out.print("Enter player " + (i + 1) + "'s nickname: ");
-            String nickname = sc.next();
-            players.add(new Player(difficultyTime,hintCount,nickname));
+            sc.nextLine();
+            for (int i = 0; i < num; i++) {
+                System.out.print("Enter player " + (i + 1) + "'s nickname: ");
+                String nickname = sc.next();
+                players.add(new Player(difficultyTime, hintCount, nickname));
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter number.");
+            System.exit(1);
         }
     }
 
@@ -89,7 +94,7 @@ public class SetGameConsole{
         setGame.printBoard();
         System.out.println("Player " + player.getNickname() + "'s turn:");
         System.out.println("(" + player.getHintCount() + " hints are left)");
-        System.out.println("Enter 1'st index of a set or type 'hint' for a hint, 'add' for additional row:");
+        System.out.println("Enter indices of a cards forming a set(one by one or in a row) or type 'hint' for a hint, 'add' for additional row:");
     }
 
     private void manageInput(String input, Player player) {
@@ -116,6 +121,7 @@ public class SetGameConsole{
                     setGame.replaceCards(indices);
                 } else {
                     System.out.println("Not a valid set.");
+                    rightSet = false;
                 }
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException | InputMismatchException e) {
                 System.out.println("Invalid input. Please enter three valid indices separated by spaces.");
@@ -124,19 +130,24 @@ public class SetGameConsole{
     }
 
     private void setDifficultyLevel(int difficulty) {
-        switch (Difficulty.values()[difficulty - 1]) {
-            case Difficulty.EASY:
-                difficultyTime = 60;
-                hintCount = 8;
-                break;
-            case Difficulty.MEDIUM:
-                difficultyTime = 45;
-                hintCount = 7;
-                break;
-            case Difficulty.HARD:
-                difficultyTime = 30;
-                hintCount = 6;
-                break;
+        try {
+            switch (Difficulty.values()[difficulty - 1]) {
+                case Difficulty.EASY:
+                    difficultyTime = 60;
+                    hintCount = 8;
+                    break;
+                case Difficulty.MEDIUM:
+                    difficultyTime = 45;
+                    hintCount = 7;
+                    break;
+                case Difficulty.HARD:
+                    difficultyTime = 30;
+                    hintCount = 6;
+                    break;
+            }
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Wrong index: the index should be in a range from 1 to 3 included, corresponding to difficulty level.");
+            System.exit(1);
         }
     }
 
@@ -145,7 +156,6 @@ public class SetGameConsole{
         System.out.println("(1) Easy \n(2) Medium \n(3) Hard");
         return sc.nextInt();
     }
-
     private void provideHint(Player player) {
         if (player.getHintCount() > 0) {
             System.out.println("Hint: " + Arrays.toString(setGame.hint()));

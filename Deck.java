@@ -1,11 +1,13 @@
 import java.util.Random;
 
 public class Deck {
-    private static final int DECK_SIZE = 81;
+    public static final int DECK_SIZE = 81;
     private final Card[] deck;
+    private int copyIndex;
 
     public Deck(){
         deck = generateDeck();
+        copyIndex = 0;
     }
     private Card[] generateDeck() {
         Card[] cards = new Card[DECK_SIZE];
@@ -36,10 +38,17 @@ public class Deck {
             cards[r] = transfer;
         }
     }
+    public boolean isDeckEmpty() {
+        return copyIndex >= deck.length;
+    }
+
+    public int getDeckIndex() {
+        return copyIndex;
+    }
+    public int addCopyIndex() {
+        return copyIndex++;
+    }
     public Card[] getDeck() {
         return deck;
-    }
-    public static int getDeckSize() {
-        return DECK_SIZE;
     }
 }

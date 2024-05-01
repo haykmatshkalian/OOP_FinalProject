@@ -3,7 +3,6 @@ public class Board {
     private Card[] board;
     private boolean extendedBoard = false;
     private final Deck deckClass;
-    private int copyIndex;
 
 
     public Board(Deck deck) {
@@ -14,7 +13,7 @@ public class Board {
 
     private void setCards() {
         for (int i = 0; i < BOARD_SIZE; i++) {
-            board[i] = deckClass.getDeck()[copyIndex++];
+            board[i] = deckClass.getDeck()[deckClass.addCopyIndex()];
         }
     }
 
@@ -46,8 +45,8 @@ public class Board {
     public void replaceCardsStandard(int[] indices) {
         if (!extendedBoard) {
             for (int index : indices) {
-                if (!isDeckEmpty()) {
-                    board[index] = deckClass.getDeck()[copyIndex++];
+                if (!deckClass.isDeckEmpty()) {
+                    board[index] = deckClass.getDeck()[deckClass.addCopyIndex()];
                 }
             }
         }
@@ -67,15 +66,15 @@ public class Board {
         }
         removeRow(overStandard);
 
-        if(copyIndex > Deck.getDeckSize() - 3)
+        if(deckClass.getDeckIndex() > Deck.DECK_SIZE - 3)
 
-    {
-        for (int index : indices) {
-            board[index] = null;
+        {
+            for (int index : indices) {
+                board[index] = null;
+            }
+            removeRow();
         }
-        removeRow();
     }
-}
 
 //    public boolean hasSetOnBoard() {
 //        for (int i = 0; i < board.length - 2; i++) {
@@ -110,13 +109,13 @@ public class Board {
     }
 
     public void addRow() {
-        if (copyIndex + 3 <= Deck.getDeckSize()) {
+        if (deckClass.getDeckIndex() + 3 <= Deck.DECK_SIZE) {
             Card[] newBoard = new Card[board.length + 3];
             System.arraycopy(board, 0, newBoard, 0, board.length);
 
             for (int i = board.length; i < newBoard.length; i++) {
-                if (copyIndex < Deck.getDeckSize()) {
-                    newBoard[i] = deckClass.getDeck()[copyIndex];
+                if (deckClass.getDeckIndex() < Deck.DECK_SIZE) {
+                    newBoard[i] = deckClass.getDeck()[deckClass.addCopyIndex()];
                 }
             }
             board = newBoard;
@@ -152,9 +151,6 @@ public class Board {
             }
         }
         board = newBoard;
-    }
-    public boolean isDeckEmpty() {
-        return copyIndex >= deckClass.getDeck().length;
     }
 //    public boolean isLastBoard () {
 //        return board.length <= 12;
