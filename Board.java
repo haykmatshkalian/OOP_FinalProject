@@ -1,8 +1,9 @@
 public class Board {
-    private final int BOARD_SIZE = 12;
+    private static final int BOARD_SIZE = 12;
     private Card[] board;
     private boolean extendedBoard = false;
     private final Deck deckClass;
+    private int copyIndex;
 
 
     public Board(Deck deck) {
@@ -10,9 +11,10 @@ public class Board {
         board = new Card[BOARD_SIZE];
         setCards();
     }
+
     private void setCards() {
         for (int i = 0; i < BOARD_SIZE; i++) {
-            board[i] = deckClass.deck[deckClass.copyIndex++];
+            board[i] = deckClass.getDeck()[copyIndex++];
         }
     }
 
@@ -29,39 +31,51 @@ public class Board {
                 allSameOrDifferent(card1.getNumber(), card2.getNumber(), card3.getNumber()));
     }
 
-    private boolean allSameOrDifferent(Enum<?> str1, Enum<?>  str2, Enum<?>  str3) {
+    private boolean allSameOrDifferent(Enum<?> str1, Enum<?> str2, Enum<?> str3) {
         return (str1.equals(str2) && str2.equals(str3)) || (!str1.equals(str2) && !str2.equals(str3) && !str1.equals(str3));
     }
 
     public void replaceCards(int[] indices) {
         if (!extendedBoard) {
-            for (int index : indices) {
-                if (!deckClass.isDeckEmpty()) {
-                    board[index] = deckClass.deck[deckClass.copyIndex++];
-                }
-            }
+            replaceCardsStandard(indices);
         } else {
-            for (int index : indices) {
-                board[index] = null;
-            }
-            int indexBoard = 0;
-            Card[] overStandard = new Card[3];
-            for (int i = board.length - 3; i < board.length; i++){
-                if (board[i] != null) {
-                    overStandard[indexBoard] = board[i];
-                    indexBoard++;
-                }
-            }
-            removeRow(overStandard);
-
-        }
-        if (deckClass.copyIndex > deckClass.DECK_SIZE - 3) {
-            for (int index : indices) {
-                board[index] = null;
-            }
-            removeRow();
+            replaceCardsExtended(indices);
         }
     }
+
+    public void replaceCardsStandard(int[] indices) {
+        if (!extendedBoard) {
+            for (int index : indices) {
+                if (!isDeckEmpty()) {
+                    board[index] = deckClass.getDeck()[copyIndex++];
+                }
+            }
+        }
+    }
+
+    public void replaceCardsExtended(int[] indices) {
+        for (int index : indices) {
+            board[index] = null;
+        }
+        int indexBoard = 0;
+        Card[] overStandard = new Card[3];
+        for (int i = board.length - 3; i < board.length; i++) {
+            if (board[i] != null) {
+                overStandard[indexBoard] = board[i];
+                indexBoard++;
+            }
+        }
+        removeRow(overStandard);
+
+        if(copyIndex > Deck.getDeckSize() - 3)
+
+    {
+        for (int index : indices) {
+            board[index] = null;
+        }
+        removeRow();
+    }
+}
 
 //    public boolean hasSetOnBoard() {
 //        for (int i = 0; i < board.length - 2; i++) {
@@ -96,13 +110,13 @@ public class Board {
     }
 
     public void addRow() {
-        if (deckClass.copyIndex + 3 <= deckClass.DECK_SIZE) {
+        if (copyIndex + 3 <= Deck.getDeckSize()) {
             Card[] newBoard = new Card[board.length + 3];
             System.arraycopy(board, 0, newBoard, 0, board.length);
 
             for (int i = board.length; i < newBoard.length; i++) {
-                if (deckClass.copyIndex < deckClass.DECK_SIZE) {
-                    newBoard[i] = deckClass.deck[deckClass.copyIndex++];
+                if (copyIndex < Deck.getDeckSize()) {
+                    newBoard[i] = deckClass.getDeck()[copyIndex];
                 }
             }
             board = newBoard;
@@ -139,4 +153,10 @@ public class Board {
         }
         board = newBoard;
     }
+    public boolean isDeckEmpty() {
+        return copyIndex >= deckClass.getDeck().length;
+    }
+//    public boolean isLastBoard () {
+//        return board.length <= 12;
+//    }
 }
