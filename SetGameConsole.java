@@ -21,8 +21,8 @@ public class SetGameConsole{
         System.out.println("Enter nickname: ");
         String nickname = sc.next();
 
-        int difficulty = promptDifficultyLevel();
-        setDifficultyLevel(difficulty);
+        promptDifficultyLevel();
+        setDifficultyLevel();
         Player singlePlayer = new Player(difficultyTime,hintCount,nickname);
 
         play(singlePlayer);
@@ -71,21 +71,26 @@ public class SetGameConsole{
     }
 
     private void addPlayers() {
-        int difficulty = promptDifficultyLevel();
-        setDifficultyLevel(difficulty);
-        try {
-            System.out.println("Enter number of players: ");
-            int num = sc.nextInt();
+        promptDifficultyLevel();
+        setDifficultyLevel();
+        int num = 0;
+        boolean validInput = false;
 
-            sc.nextLine();
-            for (int i = 0; i < num; i++) {
-                System.out.print("Enter player " + (i + 1) + "'s nickname: ");
-                String nickname = sc.next();
-                players.add(new Player(difficultyTime, hintCount, nickname));
+        while (!validInput) {
+            try {
+                System.out.println("Enter number of players: ");
+                num = sc.nextInt();
+                sc.nextLine();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a numeric value.");
+                sc.next();
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter number.");
-            System.exit(1);
+        }
+        for (int i = 0; i < num; i++) {
+            System.out.print("Enter player " + (i + 1) + "'s nickname: ");
+            String nickname = sc.next();
+            players.add(new Player(difficultyTime, hintCount, nickname));
         }
     }
 
@@ -129,32 +134,42 @@ public class SetGameConsole{
         }
     }
 
-    private void setDifficultyLevel(int difficulty) {
-        try {
-            switch (Difficulty.values()[difficulty - 1]) {
-                case Difficulty.EASY:
-                    difficultyTime = 60;
-                    hintCount = 8;
-                    break;
-                case Difficulty.MEDIUM:
-                    difficultyTime = 45;
-                    hintCount = 7;
-                    break;
-                case Difficulty.HARD:
-                    difficultyTime = 30;
-                    hintCount = 6;
-                    break;
+    private void setDifficultyLevel() {
+        while (true) {
+            if (sc.hasNextInt()) {
+                int difficulty = sc.nextInt();
+
+                if (difficulty >= 1 && difficulty <= 3) {
+                    switch (Difficulty.values()[difficulty - 1]) {
+                        case EASY:
+                            difficultyTime = 60;
+                            hintCount = 8;
+                            System.out.println("Difficulty set to EASY.");
+                            return;
+                        case MEDIUM:
+                            difficultyTime = 45;
+                            hintCount = 7;
+                            System.out.println("Difficulty set to MEDIUM.");
+                            return;
+                        case HARD:
+                            difficultyTime = 30;
+                            hintCount = 6;
+                            System.out.println("Difficulty set to HARD.");
+                            return;
+                    }
+                } else {
+                    System.out.println("Invalid input: Please enter a number between 1 and 3.");
+                }
+            } else {
+                System.out.println("Invalid input: Please enter a numeric value.");
+                sc.next();
             }
-        } catch (ArrayIndexOutOfBoundsException e){
-            System.out.println("Wrong index: the index should be in a range from 1 to 3 included, corresponding to difficulty level.");
-            System.exit(1);
         }
     }
 
-    private int promptDifficultyLevel() {
+    private void promptDifficultyLevel() {
         System.out.println("Select the difficulty level by number input:");
         System.out.println("(1) Easy \n(2) Medium \n(3) Hard");
-        return sc.nextInt();
     }
     private void provideHint(Player player) {
         if (player.getHintCount() > 0) {
