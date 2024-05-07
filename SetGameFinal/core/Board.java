@@ -1,3 +1,7 @@
+package SetGameFinal.core;
+
+import java.util.Arrays;
+
 public class Board {
     private static final int BOARD_SIZE = 12;
     private Card[] board;
@@ -17,7 +21,7 @@ public class Board {
         }
     }
 
-    public boolean isSet(int[] indices) {
+    public boolean isSet(Integer[] indices) {
         if (indices.length != 3) {
             return false;
         }
@@ -34,7 +38,7 @@ public class Board {
         return (str1.equals(str2) && str2.equals(str3)) || (!str1.equals(str2) && !str2.equals(str3) && !str1.equals(str3));
     }
 
-    public void replaceCards(int[] indices) {
+    public void replaceCards(Integer[] indices) {
         if (!extendedBoard) {
             replaceCardsStandard(indices);
         } else {
@@ -42,7 +46,7 @@ public class Board {
         }
     }
 
-    public void replaceCardsStandard(int[] indices) {
+    private void replaceCardsStandard(Integer[] indices) {
         if (!extendedBoard) {
             for (int index : indices) {
                 if (!deckClass.isDeckEmpty()) {
@@ -52,7 +56,7 @@ public class Board {
         }
     }
 
-    public void replaceCardsExtended(int[] indices) {
+    public void replaceCardsExtended(Integer[] indices) {
         for (int index : indices) {
             board[index] = null;
         }
@@ -75,25 +79,11 @@ public class Board {
             removeRow();
         }
     }
-
-//    public boolean hasSetOnBoard() {
-//        for (int i = 0; i < board.length - 2; i++) {
-//            for (int j = i + 1; j < board.length - 1; j++) {
-//                for (int k = j + 1; k < board.length; k++) {
-//                    if (isSet(new int[]{i, j, k})) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
     public Card[] hint() {
         for (int i = 0; i < board.length - 2; i++) {
             for (int j = i + 1; j < board.length - 1; j++) {
                 for (int k = j + 1; k < board.length; k++) {
-                    if (isSet(new int[]{i, j, k})) {
+                    if (isSet(new Integer[]{i, j, k})) {
                         return new Card[]{board[i],board[j],board[k]};
                     }
                 }
@@ -124,6 +114,7 @@ public class Board {
             System.out.println("Deck size limit reached.");
         }
     }
+
     private void removeRow(Card[] overStandard) {
         if (extendedBoard) {
             Card[] newBoard = new Card[board.length - 3];
@@ -142,6 +133,7 @@ public class Board {
             }
         }
     }
+
     private void removeRow() {
         Card[] newBoard = new Card[board.length - 3];
         int indexTemp = 0;
@@ -152,7 +144,10 @@ public class Board {
         }
         board = newBoard;
     }
-//    public boolean isLastBoard () {
-//        return board.length <= 12;
-//    }
+    public boolean getExtendedBoard(){
+        return extendedBoard;
+    }
+    public Card[] getBoard() {
+        return Arrays.copyOf(board, board.length);
+    }
 }

@@ -1,3 +1,7 @@
+package SetGameFinal.console;
+
+import SetGameFinal.core.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -16,6 +20,27 @@ public class SetGameConsole{
     private static int difficultyTime = 0;
     private static int hintCount = 0;
 
+    public void startGame() {
+        System.out.println("Welcome to SET game");
+        String mode = null;
+
+        while (mode == null) {
+            System.out.println("Select game mode (Singleplayer,Multiplayer): ");
+            String input = sc.nextLine();
+
+            try {
+                mode = checkGameMode(input);
+                if (mode.equalsIgnoreCase("Singleplayer")) {
+                    playConsoleSinglePlayer();
+                } else if (mode.equalsIgnoreCase("Multiplayer")) {
+                    playConsoleMultiPlayer();
+                }
+            } catch (InvalidGameModeException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
     public void playConsoleSinglePlayer() {
         System.out.println("Entering console version of Singleplayer...");
         System.out.println("Enter nickname: ");
@@ -32,6 +57,7 @@ public class SetGameConsole{
         System.out.println("Entering console version of Multiplayer...");
         play();
     }
+
     private void play(Player singlePlayer) {
         singlePlayer.getPlayerTimer().startTimer();
         while (singlePlayer.getPlayerTimer().getSecondsLeft() != 0) {
@@ -113,7 +139,7 @@ public class SetGameConsole{
             setGame.addRow();
         } else {
             try {
-                int[] indices = new int[3];
+                Integer[] indices = new Integer[3];
                 indices[0] = Integer.parseInt(input) - 1;
                 for (int i = 1; i < 3; i++) {
                     System.out.println("Enter " + (i + 1) + " index of set: ");
@@ -129,7 +155,8 @@ public class SetGameConsole{
                     rightSet = false;
                 }
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException | InputMismatchException e) {
-                System.out.println("Invalid input. Please enter three valid indices separated by spaces.");
+                System.out.println("Invalid input. Please enter three valid indices one by one or separated by spaces.");
+                System.out.println();
             }
         }
     }
@@ -171,6 +198,7 @@ public class SetGameConsole{
         System.out.println("Select the difficulty level by number input:");
         System.out.println("(1) Easy \n(2) Medium \n(3) Hard");
     }
+
     private void provideHint(Player player) {
         if (player.getHintCount() > 0) {
             System.out.println("Hint: " + Arrays.toString(setGame.hint()));
@@ -179,6 +207,7 @@ public class SetGameConsole{
             System.out.println("No hints remaining.");
         }
     }
+
     private void removePlayer(int index) {
         players.remove(index);
     }
@@ -186,5 +215,13 @@ public class SetGameConsole{
     private void successfulSet(Player play){
         play.addScore();
         play.getPlayerTimer().addTime(20);
+    }
+
+    private static String checkGameMode(String mode) throws InvalidGameModeException {
+        if (mode.equalsIgnoreCase("Singleplayer") || mode.equalsIgnoreCase("Multiplayer")) {
+            return mode;
+        } else {
+            throw new InvalidGameModeException("Invalid game mode. Please choose either 'Singleplayer' or 'Multiplayer'.");
+        }
     }
 }

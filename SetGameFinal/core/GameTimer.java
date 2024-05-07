@@ -1,3 +1,5 @@
+package SetGameFinal.core;
+
 import javax.swing.*;
 import java.awt.event.*;
 
