@@ -2,15 +2,16 @@ package SetGameFinal.console;
 
 import SetGameFinal.core.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+
+import java.util.*;
 
 public class SetGameConsole{
     private final Board setGame = new Board(new Deck());
     private final Scanner sc = new Scanner(System.in);
     private final ArrayList<Player> players = new ArrayList<>();
+    private final String LEADERSHIP_FILE = "leaderboard.txt";
+    private final LeaderboardManager leaderboardManager;
+
     private boolean rightSet = true;
     public enum Difficulty {
         EASY,
@@ -19,6 +20,11 @@ public class SetGameConsole{
     }
     private static int difficultyTime = 0;
     private static int hintCount = 0;
+
+    public SetGameConsole() {
+        leaderboardManager = new LeaderboardManager();
+    }
+
 
     public void startGame() {
         System.out.println("Welcome to SET game");
@@ -65,7 +71,9 @@ public class SetGameConsole{
             String input = sc.next();
             manageInput(input, singlePlayer);
         }
-        System.exit(0);
+        if(singlePlayer.getPlayerTimer().equals(0)){
+            System.exit(0);
+        }
     }
 
     private void play() {
@@ -94,6 +102,7 @@ public class SetGameConsole{
                 }
             }
         }
+
     }
 
     private void addPlayers() {
@@ -213,10 +222,12 @@ public class SetGameConsole{
     }
     
 
+
     private void successfulSet(Player play){
         play.addScore();
         play.getPlayerTimer().addTime(20);
 
+        leaderboardManager.updateLeaderboard(play.getNickname(), play.getScore());
     }
     
 
