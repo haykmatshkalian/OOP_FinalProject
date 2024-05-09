@@ -11,6 +11,7 @@ public class SetGameConsole{
     private final Board setGame = new Board(new Deck());
     private final Scanner sc = new Scanner(System.in);
     private final ArrayList<Player> players = new ArrayList<>();
+    private final String LEADERSHIP_FILE = "leaderboard.txt";
     private boolean rightSet = true;
     public enum Difficulty {
         EASY,
@@ -211,11 +212,52 @@ public class SetGameConsole{
     private void removePlayer(int index) {
         players.remove(index);
     }
+    
+    private void updateLeadershipFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LEADERSHIP_FILE, true))) {
+            Set<String> existingNicknames = new HashSet<>();
+
+            // Read existing nicknames and scores from the file
+            Files.lines(Paths.get(LEADERSHIP_FILE))
+                    .map(line -> line.split(" - "))
+                    .forEach(parts -> existingNicknames.add(parts[0]));
+
+            // Update scores with current player's score
+            for (Player player : players) {
+                if (existingNicknames.contains(player.getNickname())) {
+                    try {
+                        List<String> lines = Files.readAllLines(Paths.get(LEADERSHIP_FILE));
+                        for (int i = 0; i < lines.size(); i++) {
+                            String[] parts = lines.get(i).split(" - ");
+                            if (parts[0].equals(player.getNickname())) {
+                                int score = Integer.parseInt(parts[1]) + player.getScore();
+                                lines.set(i, player.getNickname() + " - " + score);
+                                break;
+                            }
+                        }
+                        Files.write(Paths.get(LEADERSHIP_FILE), lines);
+                    } catch (IOException e) {
+                        System.err.println("Error updating score for player: " + player.getNickname());
+                    }
+                } else {
+                    writer.write(player.getNickname() + " - " + player.getScore());
+                    writer.newLine();
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error updating leadership file: " + e.getMessage());
+        }
+    }
+    
+    
 
     private void successfulSet(Player play){
         play.addScore();
         play.getPlayerTimer().addTime(20);
+        updateLeadershipFile();
+
     }
+    
 
     private static String checkGameMode(String mode) throws InvalidGameModeException {
         if (mode.equalsIgnoreCase("Singleplayer") || mode.equalsIgnoreCase("Multiplayer")) {
