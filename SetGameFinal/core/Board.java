@@ -69,10 +69,7 @@ public class Board {
             }
         }
         removeRow(overStandard);
-
-        if(deckClass.getDeckIndex() > Deck.DECK_SIZE - 3)
-
-        {
+        if(deckClass.getDeckIndex() > Deck.DECK_SIZE - 3) {
             for (int index : indices) {
                 board[index] = null;
             }

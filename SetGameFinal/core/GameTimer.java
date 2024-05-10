@@ -15,21 +15,8 @@ public class GameTimer {
             public void actionPerformed(ActionEvent e) {
                 if (isRunning) {
                     if (secondsLeft >= 0) {
-                        if (secondsLeft == 60) {
-                            System.out.println("Time left: " + secondsLeft + " seconds");
-                        }
-                        if (secondsLeft == 30) {
-                            System.out.println("Time left: " + secondsLeft + " seconds");
-                        }
-                        if (secondsLeft == 10) {
-                            System.out.println("Time left: " + secondsLeft + " seconds");
-                        }
-                        if (secondsLeft == 5) {
-                            System.out.println("Time left: " + secondsLeft + " seconds");
-                        }
-
+                        updateImportantTimes();
                         secondsLeft--;
-
                     } else {
                         stopTimer();
                         System.out.println("Time is up!");
@@ -37,6 +24,11 @@ public class GameTimer {
                 }
             }
         });
+    }
+    private void updateImportantTimes() {
+        if (secondsLeft == 60 || secondsLeft == 30 || secondsLeft == 10 || secondsLeft == 5) {
+            System.out.println("Time left: " + secondsLeft + " seconds");
+        }
     }
 
     public void startTimer() {

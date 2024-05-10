@@ -1,15 +1,12 @@
 package SetGameFinal.console;
 
 import SetGameFinal.core.*;
-
-
 import java.util.*;
 
 public class SetGameConsole{
     private final Board setGame = new Board(new Deck());
     private final Scanner sc = new Scanner(System.in);
     private final ArrayList<Player> players = new ArrayList<>();
-    private final String LEADERSHIP_FILE = "leaderboard.txt";
     private final LeaderboardManager leaderboardManager;
 
     private boolean rightSet = true;
@@ -71,7 +68,7 @@ public class SetGameConsole{
             String input = sc.next();
             manageInput(input, singlePlayer);
         }
-        if(singlePlayer.getPlayerTimer().equals(0)){
+        if(singlePlayer.getPlayerTimer().getSecondsLeft() == 0){
             System.exit(0);
         }
     }
@@ -220,8 +217,6 @@ public class SetGameConsole{
     private void removePlayer(int index) {
         players.remove(index);
     }
-    
-
 
     private void successfulSet(Player play){
         play.addScore();
@@ -229,7 +224,6 @@ public class SetGameConsole{
 
         leaderboardManager.updateLeaderboard(play.getNickname(), play.getScore());
     }
-    
 
     private static String checkGameMode(String mode) throws InvalidGameModeException {
         if (mode.equalsIgnoreCase("Singleplayer") || mode.equalsIgnoreCase("Multiplayer")) {

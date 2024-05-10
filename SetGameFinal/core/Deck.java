@@ -6,7 +6,6 @@ public class Deck {
     public static final int DECK_SIZE = 81;
     private final Card[] deck;
     private int copyIndex;
-
     public Deck(){
         deck = generateDeck();
         copyIndex = 0;
@@ -24,13 +23,16 @@ public class Deck {
                 for (Card.Shading shade : shadings) {
                     for (Card.Number number : numbers) {
                         cards[index++] = new Card(shape, color, shade, number);
+                        ;
                     }
                 }
             }
         }
+
         shuffleDeck(cards);
         return cards;
     }
+
     private void shuffleDeck(Card[] cards) {
         Random rnd = new Random();
         for (int i = 0; i < DECK_SIZE; i++) {

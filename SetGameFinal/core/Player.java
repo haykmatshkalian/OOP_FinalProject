@@ -18,7 +18,6 @@ public class Player {
         this.nickname = nickname;
     }
     public Player(Player that){
-        this.score = that.score;
         this.hintCount = that.hintCount;
         this.nickname = that.nickname;
         this.playerTimer = that.playerTimer;

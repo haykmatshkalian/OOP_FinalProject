@@ -1,3 +1,6 @@
-Hayk,4
-AREN,4
+a,1
+A,13
+AREN,5
+test,1
 Aria,4
+Hayk,4
