@@ -1,5 +1,9 @@
 package SetGameFinal.core;
 
+/**
+ * The Card class represents a single card in the Set game.
+ * Each card has a shape, color, shading, and number.
+ */
 public class Card {
     public enum Shape {
         OVAL,
@@ -28,24 +32,63 @@ public class Card {
     private Shading shading;
     private Number number;
 
+    /**
+     * Constructs a Card object with the specified attributes.
+     *
+     * @param shape   The shape of the card.
+     * @param color   The color of the card.
+     * @param shading The shading of the card.
+     * @param number  The number of shapes on the card.
+     */
     public Card(Shape shape, Color color, Shading shading, Number number) {
         this.shape = shape;
         this.color = color;
         this.shading = shading;
         this.number = number;
     }
+
+    /**
+     * Gets the shape of the card.
+     *
+     * @return The shape enum representing the shape of the card.
+     */
     public Shape getShape() {
         return shape;
     }
+
+    /**
+     * Gets the color of the card.
+     *
+     * @return The color enum representing the color of the card.
+     */
     public Color getColor() {
         return color;
     }
+
+    /**
+     * Gets the shading of the card.
+     *
+     * @return The shading enum representing the shading of the card.
+     */
     public Shading getFill() {
         return shading;
     }
+
+
+    /**
+     * Gets the number of shapes on the card.
+     *
+     * @return The number enum representing the number of shapes on the card.
+     */
     public Number getNumber() {
         return number;
     }
+
+    /**
+     * Returns a string representation of the card.
+     *
+     * @return A string representation of the card in a format suitable for display.
+     */
     @Override
     public String toString() {
         String[] shapes = {"⬭", "♢", "~"};
