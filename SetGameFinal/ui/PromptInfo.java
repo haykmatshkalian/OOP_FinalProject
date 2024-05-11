@@ -8,12 +8,29 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The PromptInfo class represents the graphical user interface (UI) for collecting player information
+ * and selecting game difficulty before starting the Set Game.
+ */
 public class PromptInfo extends JFrame {
+    /**
+     * JTextField for entering the player's nickname.
+     */
     private final JTextField nicknameField;
+    /**
+     * Variables to store the selected difficulty level's time limit and hint count.
+     */
     private int difficultyTime;
     private int hintCount;
+
+
+    /**
+     * Constructs a PromptInfo object, setting up the UI components for nickname entry
+     * and difficulty level selection.
+     */
     public PromptInfo() {
         setTitle("SET Game");
+
 
         setSize(300, 150);
         setResizable(false);
@@ -56,6 +73,9 @@ public class PromptInfo extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * ActionListener implementation for handling difficulty level selection.
+     */
     private class DifficultyButtonListener implements ActionListener {
         private final SetGameConsole.Difficulty difficulty;
 
@@ -72,7 +92,11 @@ public class PromptInfo extends JFrame {
             dispose();
         }
     }
-
+    /**
+     * Sets the time limit and hint count based on the selected difficulty level.
+     *
+     * @param dif The selected difficulty level.
+     */
     public void setDifficultyLevel(SetGameConsole.Difficulty dif) {
         switch (dif) {
             case EASY:
