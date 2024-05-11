@@ -8,7 +8,6 @@ public class SetGameConsole{
     private final Scanner sc = new Scanner(System.in);
     private final ArrayList<Player> players = new ArrayList<>();
     private final LeaderboardManager leaderboardManager;
-
     private boolean rightSet = true;
     public enum Difficulty {
         EASY,
@@ -18,11 +17,16 @@ public class SetGameConsole{
     private static int difficultyTime = 0;
     private static int hintCount = 0;
 
+    /**
+     * Constructs a new game console. Initializes the game board and input scanner, sets up the leaderboard manager.
+     */
     public SetGameConsole() {
         leaderboardManager = new LeaderboardManager();
     }
 
-
+    /**
+     * Starts the game by displaying a welcome message and prompting the user to select a game mode.
+     */
     public void startGame() {
         System.out.println("Welcome to SET game");
         String mode = null;
@@ -44,6 +48,10 @@ public class SetGameConsole{
         }
     }
 
+    /**
+     * Manages the single player game mode.
+     * Sets up a single player game including player creation and the game loop.
+     */
     public void playConsoleSinglePlayer() {
         System.out.println("Entering console version of Singleplayer...");
         System.out.println("Enter nickname: ");
@@ -56,11 +64,21 @@ public class SetGameConsole{
         play(singlePlayer);
     }
 
+    /**
+     * Manages the multiplayer game mode.
+     * Sets up multiplayer game, including player creation and the game loop.
+     */
     public void playConsoleMultiPlayer() {
         System.out.println("Entering console version of Multiplayer...");
         play();
     }
 
+    /**
+     * Game loop for a single player.
+     * Handles the gameplay logic, timer, and user inputs until the timer runs out.
+     *
+     * @param singlePlayer The player object representing the single player.
+     */
     private void play(Player singlePlayer) {
         singlePlayer.getPlayerTimer().startTimer();
         while (singlePlayer.getPlayerTimer().getSecondsLeft() != 0) {
@@ -73,6 +91,10 @@ public class SetGameConsole{
         }
     }
 
+    /**
+     * Game loop for multiplayer.
+     * Manages turns, input, and timers for all players until no players remain.
+     */
     private void play() {
         addPlayers();
         int turn = 0;
@@ -102,6 +124,10 @@ public class SetGameConsole{
 
     }
 
+    /**
+     * Adds players to the game based on user input.
+     * Asks for the number of players and their nicknames, and initializes their objects.
+     */
     private void addPlayers() {
         promptDifficultyLevel();
         setDifficultyLevel();
@@ -126,6 +152,11 @@ public class SetGameConsole{
         }
     }
 
+    /**
+     * Displays the current state of the board and player information.
+     *
+     * @param player The current player whose turn it is.
+     */
     private void displayCurrentState(Player player) {
         System.out.println("Current board:");
         setGame.printBoard();
@@ -134,6 +165,13 @@ public class SetGameConsole{
         System.out.println("Enter indices of a cards forming a set(one by one or in a row) or type 'hint' for a hint, 'add' for additional row:");
     }
 
+    /**
+     * Manages the player's input during their turn.
+     * Processes commands like hint requests, adding rows, or attempting to form a set.
+     *
+     * @param input The user's input command.
+     * @param player The player who is currently taking their turn.
+     */
     private void manageInput(String input, Player player) {
 
         if (input.equalsIgnoreCase("hint")) {
@@ -167,6 +205,10 @@ public class SetGameConsole{
         }
     }
 
+    /**
+     * Sets the game difficulty level based on user input.
+     * Adjusts the game timer and hint availability according to the selected difficulty.
+     */
     private void setDifficultyLevel() {
         while (true) {
             if (sc.hasNextInt()) {
@@ -200,11 +242,20 @@ public class SetGameConsole{
         }
     }
 
+    /**
+     * Prompts the user to select a difficulty level.
+     */
     private void promptDifficultyLevel() {
         System.out.println("Select the difficulty level by number input:");
         System.out.println("(1) Easy \n(2) Medium \n(3) Hard");
     }
 
+    /**
+     * Provides a hint to the player if they have any remaining.
+     * Reduces the hint count and shows the hint on the console.
+     *
+     * @param player The player requesting the hint.
+     */
     private void provideHint(Player player) {
         if (player.getHintCount() > 0) {
             System.out.println("Hint: " + Arrays.toString(setGame.hint()));
@@ -214,17 +265,35 @@ public class SetGameConsole{
         }
     }
 
+    /**
+     * Removes a player from the game typically due to running out of time.
+     *
+     * @param index The index of the player in the player list to be removed.
+     */
     private void removePlayer(int index) {
         players.remove(index);
     }
 
-    private void successfulSet(Player play){
-        play.addScore();
-        play.getPlayerTimer().addTime(20);
+    /**
+     * Updates game state when a player successfully finds a set.
+     * Adds score, updates the leaderboard, and adds extra time to the player's timer.
+     *
+     * @param player The player who found the set.
+     */
+    private void successfulSet(Player player){
+        player.addScore();
+        player.getPlayerTimer().addTime(20);
 
-        leaderboardManager.updateLeaderboard(play.getNickname(), play.getScore());
+        leaderboardManager.updateLeaderboard(player.getNickname(), player.getScore());
     }
 
+    /**
+     * Validates the selected game mode and throws an exception if invalid.
+     *
+     * @param mode The game mode entered by the user.
+     * @return The validated game mode.
+     * @throws InvalidGameModeException if the entered game mode is not recognized.
+     */
     private static String checkGameMode(String mode) throws InvalidGameModeException {
         if (mode.equalsIgnoreCase("Singleplayer") || mode.equalsIgnoreCase("Multiplayer")) {
             return mode;

@@ -3,4 +3,5 @@ A,13
 AREN,5
 test,1
 Aria,4
-Hayk,4
+Hayk,14
+xatuba,1
