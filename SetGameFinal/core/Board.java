@@ -2,25 +2,42 @@ package SetGameFinal.core;
 
 import java.util.Arrays;
 
+/**
+ * The Board class represents the game board containing cards.
+ * It manages card placement, checking for sets, and replacing cards.
+ */
 public class Board {
     private static final int BOARD_SIZE = 12;
     private Card[] board;
     private boolean extendedBoard = false;
     private final Deck deckClass;
 
-
+    /**
+     * Constructs a Board object with the specified deck.
+     *
+     * @param deck The deck from which cards will be drawn.
+     */
     public Board(Deck deck) {
         this.deckClass = deck;
         board = new Card[BOARD_SIZE];
         setCards();
     }
 
+    /**
+     * Initializes the board with cards from the deck.
+     */
     private void setCards() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             board[i] = deckClass.getDeck()[deckClass.addCopyIndex()];
         }
     }
 
+    /**
+     * Checks if the selected indices form a valid set.
+     *
+     * @param indices An array of indices representing selected cards.
+     * @return True if the selected cards form a set, false otherwise.
+     */
     public boolean isSet(Integer[] indices) {
         if (indices.length != 3) {
             return false;
@@ -38,6 +55,11 @@ public class Board {
         return (str1.equals(str2) && str2.equals(str3)) || (!str1.equals(str2) && !str2.equals(str3) && !str1.equals(str3));
     }
 
+    /**
+     * Replaces selected cards on the board with new cards from the deck.
+     *
+     * @param indices An array of indices representing selected cards to be replaced.
+     */
     public void replaceCards(Integer[] indices) {
         if (!extendedBoard) {
             replaceCardsStandard(indices);
@@ -56,6 +78,11 @@ public class Board {
         }
     }
 
+    /**
+     * Replaces selected cards on the board with new cards from the deck, in case of an extended board.
+     *
+     * @param indices An array of indices representing selected cards to be replaced.
+     */
     public void replaceCardsExtended(Integer[] indices) {
         for (int index : indices) {
             board[index] = null;
@@ -76,6 +103,12 @@ public class Board {
             removeRow();
         }
     }
+
+    /**
+     * Provides a hint by finding a valid set on the board.
+     *
+     * @return An array of Card objects representing a valid set, or null if no set is found.
+     */
     public Card[] hint() {
         for (int i = 0; i < board.length - 2; i++) {
             for (int j = i + 1; j < board.length - 1; j++) {
@@ -89,12 +122,18 @@ public class Board {
         return null;
     }
 
+    /**
+     * Prints the current state of the board to the console.
+     */
     public void printBoard() {
         for (int i = 0; i < board.length; i++) {
             System.out.println((i + 1) + ": " + board[i]);
         }
     }
 
+    /**
+     * Adds a row of three cards to the board, extending its size if possible.
+     */
     public void addRow() {
         if (deckClass.getDeckIndex() + 3 <= Deck.DECK_SIZE) {
             Card[] newBoard = new Card[board.length + 3];
@@ -112,6 +151,11 @@ public class Board {
         }
     }
 
+    /**
+     * Removes a row of three cards from the board, reducing its size.
+     *
+     * @param overStandard An array of cards representing the extra cards added to the board.
+     */
     private void removeRow(Card[] overStandard) {
         if (extendedBoard) {
             Card[] newBoard = new Card[board.length - 3];
@@ -131,6 +175,9 @@ public class Board {
         }
     }
 
+    /**
+     * Removes a row of three cards from the board, reducing its size.
+     */
     private void removeRow() {
         Card[] newBoard = new Card[board.length - 3];
         int indexTemp = 0;
@@ -141,9 +188,22 @@ public class Board {
         }
         board = newBoard;
     }
+
+    /**
+     * Gets the current state of the extended board.
+     *
+     * @return True if the board is extended, false otherwise.
+     */
     public boolean getExtendedBoard(){
         return extendedBoard;
     }
+
+
+    /**
+     * Gets a copy of the board array.
+     *
+     * @return A copy of the array of Card objects representing the board.
+     */
     public Card[] getBoard() {
         return Arrays.copyOf(board, board.length);
     }
