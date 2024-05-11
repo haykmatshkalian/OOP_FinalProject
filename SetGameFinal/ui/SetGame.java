@@ -15,6 +15,11 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+/**
+ * This class represents the main user interface for the Set Game application.
+ * It extends JFrame and provides methods to initialize the game, handle user interactions,
+ * update the display, and manage game logic.
+ */
 public class SetGame extends JFrame {
     private JPanel cardPanel, sidePanel;
     private JButton[] cardButtons;
@@ -30,6 +35,11 @@ public class SetGame extends JFrame {
     public static Color borderColor = new Color(0xC7B7A3);
     private final LeaderboardManager leaderboardManager;
 
+    /**
+     * Constructs a new SetGame object with the specified player.
+     *
+     * @param player The player object representing the current player.
+     */
     public SetGame(Player player) {
         leaderboardManager = new LeaderboardManager();
         play = new Player(player);
@@ -86,6 +96,9 @@ public class SetGame extends JFrame {
         add(sidePanel, BorderLayout.EAST);
     }
 
+    /**
+     * Initializes the cards on the game board.
+     */
     private void initializeCards() {
         cardButtons = new JButton[board.getBoard().length];
         for (int i = 0; i < board.getBoard().length; i++) {
@@ -94,7 +107,12 @@ public class SetGame extends JFrame {
             cardPanel.add(cardButtons[i]);
         }
     }
-
+    /**
+     * Creates a JButton representing a card at the specified index.
+     *
+     * @param index The index of the card.
+     * @return The JButton representing the card.
+     */
     private JButton createCardButton(int index) {
         JButton button = new JButton();
         Card card = board.getBoard()[index];
@@ -109,6 +127,12 @@ public class SetGame extends JFrame {
         return button;
     }
 
+    /**
+     * Toggles the selection of a card at the specified index.
+     *
+     * @param index  The index of the card to toggle.
+     * @param button The JButton representing the card.
+     */
     private void toggleCardSelection(int index, JButton button) {
         if (selectedCards.contains(index)) {
             selectedCards.remove(index);
@@ -123,6 +147,11 @@ public class SetGame extends JFrame {
         }
     }
 
+    /**
+     * Adds a new column to the game board.
+     *
+     * @param e The ActionEvent object representing the action.
+     */
     private void addColumn(ActionEvent e) {
         if (addedColumn) {
             board.addRow();
@@ -132,6 +161,9 @@ public class SetGame extends JFrame {
             JOptionPane.showMessageDialog(null, "You have already added a column!", "Set Game", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Updates the display of the card panel.
+     */
     private void updateCardPanel() {
         cardPanel.removeAll();
         cardPanel.setLayout(new GridLayout(0, (board.getBoard().length / 3)));
@@ -145,6 +177,9 @@ public class SetGame extends JFrame {
         cardPanel.repaint();
     }
 
+    /**
+     * Checks if the selected cards form a valid set and updates the game state accordingly.
+     */
     private void checkSet() {
         if (selectedCards.size() == 3) {
             Integer[] indices = selectedCards.toArray(new Integer[0]);
@@ -172,27 +207,47 @@ public class SetGame extends JFrame {
         }
     }
 
+    /**
+     * Highlights a valid set of cards on the game board.
+     *
+     * @param e The ActionEvent object representing the action.
+     */
     private void highlightSet(ActionEvent e) {
         provideHint(play);
     }
 
+    /**
+     * Updates the hint label to display the remaining number of hints.
+     */
     private void updateHintLabel() {
         if (hintLabel != null) {
             hintLabel.setText("Hints Remained: " +  play.getHintCount());
         }
     }
 
+    /**
+     * Updates the time label to display the remaining time.
+     */
     private void updateTimeLabel() {
         if (timeLabel != null) {
             timeLabel.setText("Time Remained: " + play.getPlayerTimer().getSecondsLeft() + " seconds");
         }
     }
 
+    /**
+     * Updates the score label to display the player's score.
+     */
     private void updateScoreLabel() {
         if (scoreLabel != null) {
             scoreLabel.setText(play.getNickname() + "'s score: " + play.getScore());
         }
     }
+
+    /**
+     * Provides a hint to the player by highlighting a valid set of cards on the game board.
+     *
+     * @param play The Player object representing the current player.
+     */
     public void provideHint(Player play){
         if (play.getHintCount() !=0){
             Card[] setCards = board.hint();
@@ -212,12 +267,22 @@ public class SetGame extends JFrame {
             JOptionPane.showMessageDialog(null, "You ran out of hint's", "Set Game", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    /**
+     * Processes a successful set by updating the player's score and timer, and updating the leaderboard.
+     *
+     * @param play The Player object representing the current player.
+     */
     public void successfulSet(Player play){
         play.addScore();
         play.getPlayerTimer().addTime(20);
 
         leaderboardManager.updateLeaderboard(play.getNickname(), play.getScore());
     }
+
+    /**
+     * Sets up the timer to update the time label every second.
+     */
     private void setupTimer() {
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -227,6 +292,13 @@ public class SetGame extends JFrame {
         });
         timer.start();
     }
+
+    /**
+     * Maps a card object to its corresponding image file path.
+     *
+     * @param s The Card object to map.
+     * @return The file path of the corresponding image.
+     */
     public String setCard(Card s) {
         String imagePath = null;
         switch (s.toString()) {
@@ -476,6 +548,12 @@ public class SetGame extends JFrame {
         }
         return imagePath;
     }
+
+    /**
+     * The main method that starts the Set Game application by creating a new instance of SetGame.
+     *
+     * @param args The command-line arguments (not used).
+     */
     public static void main(String[] args) {
             PromptInfo gameUI = new PromptInfo();
             gameUI.setVisible(true);
