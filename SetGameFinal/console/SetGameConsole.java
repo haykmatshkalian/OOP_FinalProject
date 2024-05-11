@@ -3,6 +3,10 @@ package SetGameFinal.console;
 import SetGameFinal.core.*;
 import java.util.*;
 
+/**
+ * Manages the console version of the Set game, including singleplayer and multiplayer modes,
+ * player interactions, game setup, and leaderboard management.
+ */
 public class SetGameConsole{
     private final Board setGame = new Board(new Deck());
     private final Scanner sc = new Scanner(System.in);
