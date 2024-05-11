@@ -1,11 +1,3 @@
 Author(s): Hayk Matshklalyan, Aren Oganesyan, Aria Sharifi
 
-"Classes"
-
-We will have 4 classes SetGameFinal.core.Player which will contain money count of a person,name,position,status in jail. Fortune crads class which will type and value,which will be given or taken from SetGameFinal.core.Player. Property class should have title, owner, price, rent, house count and color of property(group of property). And the main class Game which will create a field out of other classes and everything will work there.
-
-"Methods"
-For SetGameFinal.core.Player we should have rolling dice, changing position, buying properties, collecting rent.
-For Fortune cards, we have 4 methonds which are collecting money, giving money, jail status, moving position.
-For Property we should check the owner, and the player on property is not the owner it takes money(method in SetGameFinal.core.Player), offer buying
-For Game class we should have information about player, its properties,money etc. and end turn method.
+https://www.canva.com/design/DAGE6gsOR1A/Q6akc0DVgNM1pyCNDos3yg/edit?utm_content=DAGE6gsOR1A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
